@@ -23,6 +23,7 @@ bool timer_disable(TIM_TypeDef *TIMx)
     TIMx->CR1 &= ~((uint16_t)0x1);
     return true;
 }
+
 bool timer_enable(TIM_TypeDef *TIMx)
 {
     TIMx->CR1 |= (uint16_t)0x1;
