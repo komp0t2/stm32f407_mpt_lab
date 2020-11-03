@@ -7,6 +7,6 @@ int main()
     {
 	GPIOA->AFR[1];
 	timer_init(TIM1,0,100,72);
-	
+	GPIO_PinAfConfig(GPIO);
     }
 }
