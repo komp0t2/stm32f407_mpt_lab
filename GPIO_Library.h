@@ -1,11 +1,11 @@
 #include "stm32f4xx.h"
 #ifndef __GPIO_LIBRARY_H
 #define __GPIO_LIBRARY_H
-#define e1 GPIO_PIN_OUT(GPIOE, 8, true);    // установка линии E в 1
-#define e0 GPIO_PIN_OUT(GPIOE, 8, false);   // установка линии E в 0
-#define rs1 GPIO_PIN_OUT(GPIOB, 0, true);   // установка линии RS в 1 (данные)
+#define e1 GPIO_PIN_OUT(GPIOE, 8, true);  // установка линии E в 1
+#define e0 GPIO_PIN_OUT(GPIOE, 8, false);  // установка линии E в 0
+#define rs1 GPIO_PIN_OUT(GPIOB, 0, true);  // установка линии RS в 1 (данные)
 #define rs0 GPIO_PIN_OUT(GPIOB, 0, false);  // установка линии RS в 0 (команда)
-#define rw1 GPIO_PIN_OUT(GPIOA, 4, true);   // установка линии RS в 1 (данные)
+#define rw1 GPIO_PIN_OUT(GPIOA, 4, true);  // установка линии RS в 1 (данные)
 #define rw0 GPIO_PIN_OUT(GPIOA, 4, false);  // установка линии RS в 0 (команда)
 #define deactivateRows GPIOD->ODR |= 0xF;
 typedef enum
@@ -174,7 +174,7 @@ bool GPIO_PinConfigure(GPIO_TypeDef *GPIOx, uint32_t num, GPIO_MODE mode, GPIO_S
 
     return true;
 }
-bool GPIO_PinAfConfig(GPIO_TypeDef *GPIOx, uint32_t num, uint32_t af)
+bool GPIO_PinAfConfig(GPIO_TypeDef *GPIOx, uint32_t num, uint32_t af)  //Установка альтернативной функции для GPIO (af - номер функции)
 {
     if (num <= 7)
     {
