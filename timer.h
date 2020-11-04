@@ -20,13 +20,13 @@ bool timer_init(TIM_TypeDef *TIMx, uint16_t CR1, uint16_t CNT, uint16_t PSC)
 }
 bool timer_disable(TIM_TypeDef *TIMx)
 {
-    TIMx->CR1 &= ~((uint16_t)0x1); //Выключение таймера
+    TIMx->CR1 &= ~((uint16_t)0x1);  //Выключение таймера
     return true;
 }
 
 bool timer_enable(TIM_TypeDef *TIMx)
 {
-    TIMx->CR1 |= (uint16_t)0x1; //Включение таймера
+    TIMx->CR1 |= (uint16_t)0x1;  //Включение таймера
     return true;
 }
 #endif
