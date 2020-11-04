@@ -1,12 +1,12 @@
 #include "stm32f4xx.h"
 #ifndef __GPIO_LIBRARY_H
 #define __GPIO_LIBRARY_H
-#define e1 GPIO_PIN_OUT(GPIOE, 8, true);   // установка линии E в 1
-#define e0 GPIO_PIN_OUT(GPIOE, 8, false);  // установка линии E в 0
-#define rs1 GPIO_PIN_OUT(GPIOB, 0, true);  // установка линии RS в 1 (данные)
-#define rs0 GPIO_PIN_OUT(GPIOB, 0, false); // установка линии RS в 0 (команда)
-#define rw1 GPIO_PIN_OUT(GPIOA, 4, true);  // установка линии RS в 1 (данные)
-#define rw0 GPIO_PIN_OUT(GPIOA, 4, false); // установка линии RS в 0 (команда)
+#define e1 GPIO_PIN_OUT(GPIOE, 8, true);    // установка линии E в 1
+#define e0 GPIO_PIN_OUT(GPIOE, 8, false);   // установка линии E в 0
+#define rs1 GPIO_PIN_OUT(GPIOB, 0, true);   // установка линии RS в 1 (данные)
+#define rs0 GPIO_PIN_OUT(GPIOB, 0, false);  // установка линии RS в 0 (команда)
+#define rw1 GPIO_PIN_OUT(GPIOA, 4, true);   // установка линии RS в 1 (данные)
+#define rw0 GPIO_PIN_OUT(GPIOA, 4, false);  // установка линии RS в 0 (команда)
 #define deactivateRows GPIOD->ODR |= 0xF;
 typedef enum
 {
@@ -56,27 +56,27 @@ typedef enum
 #endif
 typedef enum
 {
-    GPIO_SPEED_LOW      = 0x00, //Speed: 0 - Low; 1 - Medium; 2 - High; 3 - Very high
+    GPIO_SPEED_LOW      = 0x00,  //Speed: 0 - Low; 1 - Medium; 2 - High; 3 - Very high
     GPIO_SPEED_MEDIUM   = 0x01,
     GPIO_SPEED_HIGH     = 0x02,
     GPIO_SPEED_VERYHIGH = 0x03
 } GPIO_SPEED;
 typedef enum
 {
-    GPIO_MODE_INPUT  = 0x00, //Mode: 0 - Input; 1 - General purpose output; 2 - Alternative function; 3 - Analog;
+    GPIO_MODE_INPUT  = 0x00,  //Mode: 0 - Input; 1 - General purpose output; 2 - Alternative function; 3 - Analog;
     GPIO_MODE_OUTPUT = 0x01,
     GPIO_MODE_AF     = 0x02,
     GPIO_MODE_ANALOG = 0x03
 } GPIO_MODE;
 typedef enum
 {
-    GPIO_PULL_NOT  = 0x00, //Pull-up resistor: 0 - Not pull; 1 - PullUp; 2 - PullDown;
+    GPIO_PULL_NOT  = 0x00,  //Pull-up resistor: 0 - Not pull; 1 - PullUp; 2 - PullDown;
     GPIO_PULL_UP   = 0x01,
     GPIO_PULL_DOWN = 0x02,
 } GPIO_PULL;
 typedef enum
 {
-    GPIO_OUTCONF_PUSHPULL  = 0x00, //Output: 0 - PushPull; 1 - OpenDrain
+    GPIO_OUTCONF_PUSHPULL  = 0x00,  //Output: 0 - PushPull; 1 - OpenDrain
     GPIO_OUTCONF_OPENDRAIN = 0x01,
 } GPIO_OUTCONF;
 void GPIO_PortClock(GPIO_TypeDef *GPIOx, bool enable)
@@ -164,7 +164,7 @@ bool GPIO_PinConfigure(GPIO_TypeDef *GPIOx, uint32_t num, GPIO_MODE mode, GPIO_S
     GPIOx->OSPEEDR |= speed << num * 2U;
     GPIOx->MODER &= ~(0x3 << num * 2U);
     GPIOx->MODER |= mode << num * 2U;
-    if (mode == GPIO_MODE_OUTPUT)
+    if ((mode == GPIO_MODE_OUTPUT) || (mode == GPIO_MODE_AF))
     {
         GPIOx->OTYPER &= ~(0x1 << num);
         GPIOx->OTYPER |= conf << num;
@@ -188,7 +188,7 @@ bool GPIO_PinAfConfig(GPIO_TypeDef *GPIOx, uint32_t num, uint32_t af)
     }
     return true;
 }
-void DELAY(unsigned long Time) //Задержка
+void DELAY(unsigned long Time)  //Задержка
 {
     unsigned long int Iterator;
     for (Iterator = 0; Iterator < (((SystemCoreClock / 28000) * Time) / 1000); Iterator++)
@@ -204,7 +204,7 @@ void delay(void)
         ;
 }
 
-void GPIO_PIN_OUT(GPIO_TypeDef *GPIOx, uint32_t num, bool pos) //Установка значения порта
+void GPIO_PIN_OUT(GPIO_TypeDef *GPIOx, uint32_t num, bool pos)  //Установка значения порта
 {
     if (pos)
     {
@@ -228,9 +228,9 @@ int GPIO_PIN_IN_KEY(GPIO_TypeDef *GPIOx, uint32_t num)
                     return GPIO_PIN_IN(GPIOx, num);
     return -1;
 }
-uint16_t get_key() //Получение кода клавиши (-1 - нажатие меньше или больше одной кнопки)
+uint16_t get_key()  //Получение кода клавиши (-1 - нажатие меньше или больше одной кнопки)
 {
-    uint16_t key_Code = 0; //Код клавиши
+    uint16_t key_Code = 0;  //Код клавиши
     deactivateRows;
     for (int x = 0; x < 4; x++)
     {
@@ -253,7 +253,7 @@ uint16_t get_key() //Получение кода клавиши (-1 - нажат
     else
         return -1;
 }
-void LCD_COMMAND(uint8_t num) //Команды управления дисплея
+void LCD_COMMAND(uint8_t num)  //Команды управления дисплея
 {
     int a[8];
     int i = 0;
@@ -335,7 +335,7 @@ void LCD_COMMAND(uint8_t num) //Команды управления диспле
     e0;
     DELAY(1000);
 }
-void LCD_WRITE(uint8_t num) //Запись данных в дисплей
+void LCD_WRITE(uint8_t num)  //Запись данных в дисплей
 {
     int a[8];
     int i = 0;
@@ -416,7 +416,7 @@ void LCD_WRITE(uint8_t num) //Запись данных в дисплей
     e0;
     DELAY(5000);
 }
-void DISPLAY_ON() //Инициализация дисплея
+void DISPLAY_ON()  //Инициализация дисплея
 {
     GPIO_PinConfigure(GPIOB, 0, GPIO_MODE_OUTPUT, GPIO_SPEED_LOW, GPIO_PULL_NOT, GPIO_OUTCONF_PUSHPULL);
     GPIO_PinConfigure(GPIOE, 8, GPIO_MODE_OUTPUT, GPIO_SPEED_LOW, GPIO_PULL_NOT, GPIO_OUTCONF_PUSHPULL);
