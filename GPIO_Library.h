@@ -65,7 +65,7 @@ typedef enum
 {
     GPIO_MODE_INPUT  = 0x00, //Mode: 0 - Input; 1 - General purpose output; 2 - Alternative function; 3 - Analog;
     GPIO_MODE_OUTPUT = 0x01,
-    GPIO_MODE_ATF    = 0x02,
+    GPIO_MODE_AF     = 0x02,
     GPIO_MODE_ANALOG = 0x03
 } GPIO_MODE;
 typedef enum
@@ -183,8 +183,8 @@ bool GPIO_PinAfConfig(GPIO_TypeDef *GPIOx, uint32_t num, uint32_t af)
     }
     else if ((num <= 15) && (num > 7))
     {
-        GPIOx->AFR[1] &= ~(0xF << num * 4U);
-        GPIOx->AFR[1] |= ((af & 0xF) << num * 4U);
+        GPIOx->AFR[1] &= ~(0xF << (num - 8) * 4U);
+        GPIOx->AFR[1] |= ((af & 0xF) << (num - 8) * 4U);
     }
     return true;
 }
@@ -267,42 +267,66 @@ void LCD_COMMAND(uint8_t num) //Команды управления диспле
     rw0;
     e1;
     delay();
-    if (a[0] == 1) { GPIO_PIN_OUT(GPIOC, 0, true); }
+    if (a[0] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 0, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 0, false);
     }
-    if (a[1] == 1) { GPIO_PIN_OUT(GPIOC, 1, true); }
+    if (a[1] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 1, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 1, false);
     }
-    if (a[2] == 1) { GPIO_PIN_OUT(GPIOC, 2, true); }
+    if (a[2] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 2, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 2, false);
     }
-    if (a[3] == 1) { GPIO_PIN_OUT(GPIOC, 3, true); }
+    if (a[3] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 3, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 3, false);
     }
-    if (a[4] == 1) { GPIO_PIN_OUT(GPIOC, 4, true); }
+    if (a[4] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 4, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 4, false);
     }
-    if (a[5] == 1) { GPIO_PIN_OUT(GPIOC, 5, true); }
+    if (a[5] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 5, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 5, false);
     }
-    if (a[6] == 1) { GPIO_PIN_OUT(GPIOC, 6, true); }
+    if (a[6] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 6, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 6, false);
     }
-    if (a[7] == 1) { GPIO_PIN_OUT(GPIOC, 7, true); }
+    if (a[7] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 7, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 7, false);
@@ -324,42 +348,66 @@ void LCD_WRITE(uint8_t num) //Запись данных в дисплей
     rs1;
     e1;
     delay();
-    if (a[0] == 1) { GPIO_PIN_OUT(GPIOC, 0, true); }
+    if (a[0] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 0, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 0, false);
     }
-    if (a[1] == 1) { GPIO_PIN_OUT(GPIOC, 1, true); }
+    if (a[1] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 1, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 1, false);
     }
-    if (a[2] == 1) { GPIO_PIN_OUT(GPIOC, 2, true); }
+    if (a[2] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 2, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 2, false);
     }
-    if (a[3] == 1) { GPIO_PIN_OUT(GPIOC, 3, true); }
+    if (a[3] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 3, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 3, false);
     }
-    if (a[4] == 1) { GPIO_PIN_OUT(GPIOC, 4, true); }
+    if (a[4] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 4, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 4, false);
     }
-    if (a[5] == 1) { GPIO_PIN_OUT(GPIOC, 5, true); }
+    if (a[5] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 5, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 5, false);
     }
-    if (a[6] == 1) { GPIO_PIN_OUT(GPIOC, 6, true); }
+    if (a[6] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 6, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 6, false);
     }
-    if (a[7] == 1) { GPIO_PIN_OUT(GPIOC, 7, true); }
+    if (a[7] == 1)
+    {
+        GPIO_PIN_OUT(GPIOC, 7, true);
+    }
     else
     {
         GPIO_PIN_OUT(GPIOC, 7, false);
