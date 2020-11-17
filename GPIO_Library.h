@@ -7,7 +7,7 @@
 #define rs0 GPIO_PIN_OUT(GPIOB, 0, false);  // установка линии RS в 0 (команда)
 #define rw1 GPIO_PIN_OUT(GPIOA, 4, true);  // установка линии RS в 1 (данные)
 #define rw0 GPIO_PIN_OUT(GPIOA, 4, false);  // установка линии RS в 0 (команда)
-#define deactivateRows GPIOD->ODR |= 0xF;
+#define deactivateRows GPIOD->ODR |= 0xF;//Перевод PD0-PD3 в состояние HIGH
 typedef enum
 {
     KEY_ZERO     = 0x13,
