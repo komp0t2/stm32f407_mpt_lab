@@ -79,7 +79,7 @@ typedef enum
     GPIO_OUTCONF_PUSHPULL  = 0x00,  //Output: 0 - PushPull; 1 - OpenDrain
     GPIO_OUTCONF_OPENDRAIN = 0x01,
 } GPIO_OUTCONF;
-void GPIO_PortClock(GPIO_TypeDef *GPIOx, bool enable)
+void GPIO_PortClock(GPIO_TypeDef *GPIOx, bool enable)//Включение тактирования GPIO
 {
     if (enable)
     {
@@ -116,7 +116,7 @@ void GPIO_PortClock(GPIO_TypeDef *GPIOx, bool enable)
             RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOGEN;
     }
 }
-bool GPIO_GetPortClockState(GPIO_TypeDef *GPIOx)
+bool GPIO_GetPortClockState(GPIO_TypeDef *GPIOx)//проверка тактирования GPIO
 {
 
     if (GPIOx == GPIOA)
@@ -215,11 +215,11 @@ void GPIO_PIN_OUT(GPIO_TypeDef *GPIOx, uint32_t num, bool pos)  //Установ
         GPIOx->ODR &= ~(0x1 << num);
     }
 }
-int GPIO_PIN_IN(GPIO_TypeDef *GPIOx, uint32_t num)
+int GPIO_PIN_IN(GPIO_TypeDef *GPIOx, uint32_t num)//Проверка состояния входа вывода GPIO
 {
     return ((GPIOx->IDR & (1U << num)) != 0U);
 }
-int GPIO_PIN_IN_KEY(GPIO_TypeDef *GPIOx, uint32_t num)
+int GPIO_PIN_IN_KEY(GPIO_TypeDef *GPIOx, uint32_t num)//Проверка отстутствия дребезга на входе вывода GPIO
 {
     if (GPIO_PIN_IN(GPIOx, num) == 0)
         if (GPIO_PIN_IN(GPIOx, num) == 0)
