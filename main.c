@@ -1,5 +1,6 @@
 #include "GPIO_Library.h"
 #include "stm32f407xx.h"
+#include "stm32f4xx_adc.h"
 #include "timer.h"
 int main()
 {

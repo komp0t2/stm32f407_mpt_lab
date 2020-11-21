@@ -53,6 +53,7 @@
       <file file_name="main.c" />
       <file file_name="timer.h" />
       <file file_name="GPIO_Library.h" />
+      <file file_name="stm32f4xx_adc.h" />
     </folder>
     <folder Name="System Files">
       <file file_name="SEGGER_THUMB_Startup.s" />
