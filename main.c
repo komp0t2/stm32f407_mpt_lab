@@ -2,21 +2,33 @@
 #include "stm32f407xx.h"
 #include "stm32f4xx_adc.h"
 #include "timer.h"
+void init()
+{
+    GPIO_PinConfigure(GPIOA, 6, GPIO_MODE_ANALOG, GPIO_SPEED_HIGH, GPIO_PULL_NOT, 0);
+    RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
+    ADC_InitTypeDef ADC_Structure;
+    ADC_StructInit(&ADC_Structure);
+    ADC_Structure.ADC_Resolution = ADC_Mode_Independent;
+    ADC_Structure.ADC_ScanConvMode = DISABLE;
+    ADC_Structure.ADC_ContinuousConvMode = DISABLE;
+    ADC_Structure.ADC_DataAlign = ADC_DataAlign_Right;
+    ADC_Structure.ADC_NbrOfConversion = 1;
+    ADC_Structure.ADC_ExternalTrigConv = ADC_ExternalTrigConvEdge_None;
+    ADC_Init(ADC1, &ADC_Structure);
+    ADC_Cmd(ADC1, ENABLE);
+    ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 1, ADC_SampleTime_56Cycles);
+}
 int main()
 {
-    
-    RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;  //Тактирование таймера
-    timer_init(TIM1, 0, 80, 100);  //Инициализация таймера предделитель 16, счетчик 100
-    GPIO_PinConfigure(GPIOA, 8, GPIO_MODE_AF, GPIO_SPEED_VERYHIGH, GPIO_PULL_NOT, GPIO_OUTCONF_PUSHPULL);  //Конфигурация PA8
-    GPIO_PinAfConfig(GPIOA, 8, 1);  //AF1 альтернативная функция PA8
-    GPIO_PinConfigure(GPIOA, 7, GPIO_MODE_AF, GPIO_SPEED_VERYHIGH, GPIO_PULL_NOT, GPIO_OUTCONF_PUSHPULL);  //Конфигурация PA8
-    GPIO_PinAfConfig(GPIOA, 7, 1);  //AF1 альтернативная функция PA7
-    TIM1->CCR1 = 8;  //Заполнение
-    TIM1->BDTR |= TIM_BDTR_MOE;  //Разрешение на использования выхода с регистра сравнения как выход порта GPIO
-    TIM1->CCMR1 |= (TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2);  //Режим ШИМ1 (Прямой шим)
-    TIM1->CCER |= TIM_CCER_CC1E | TIM_CCER_CC1NE;  //Активация канала с регистра сравнения
-    timer_enable(TIM1);  //Активация таймера
-    while (1)
+    while(1)
     {
+        init();
+        volatile uint16_t val = 0;
+        while(1)
+        {
+            ADC_SoftwareStartConv(ADC1);
+            while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET) {};
+            val = ADC_GetConversionValue(ADC1);
+        }
     }
 }
