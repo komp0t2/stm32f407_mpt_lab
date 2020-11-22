@@ -1,6 +1,6 @@
-Output/Debug/Obj/Executable_1/main.o: \
-  D:\IGOR\STUDY\stm32f407_mpt_lab\main.c \
-  D:\IGOR\STUDY\stm32f407_mpt_lab\GPIO_Library.h \
+Output/Debug/Obj/Executable_1/stm32f4xx_adc.o: \
+  D:\IGOR\STUDY\stm32f407_mpt_lab\stm32f4xx_adc.c \
+  D:\IGOR\STUDY\stm32f407_mpt_lab\stm32f4xx_adc.h \
   D:\IGOR\STUDY\stm32f407_mpt_lab\STM32F4xx\CMSIS\Device\Include\stm32f4xx.h \
   D:\IGOR\STUDY\stm32f407_mpt_lab\STM32F4xx\CMSIS\Device\Include\stm32f407xx.h \
   C:\Users\Igor\AppData\Local\SEGGER\SEGGER\ Embedded\ Studio\v3\packages\CMSIS_5\CMSIS\Core\Include\core_cm4.h \
@@ -13,6 +13,4 @@ Output/Debug/Obj/Executable_1/main.o: \
   C:\Users\Igor\AppData\Local\SEGGER\SEGGER\ Embedded\ Studio\v3\packages\CMSIS_5\CMSIS\Core\Include\cmsis_gcc.h \
   C:\Users\Igor\AppData\Local\SEGGER\SEGGER\ Embedded\ Studio\v3\packages\CMSIS_5\CMSIS\Core\Include\mpu_armv7.h \
   D:\IGOR\STUDY\stm32f407_mpt_lab\STM32F4xx\CMSIS\Device\Include\system_stm32f4xx.h \
-  D:\IGOR\STUDY\stm32f407_mpt_lab\STM32F4xx\CMSIS\Device\Include\stm32f407xx.h \
-  D:\IGOR\STUDY\stm32f407_mpt_lab\stm32f4xx_adc.h \
-  D:\IGOR\STUDY\stm32f407_mpt_lab\timer.h
+  D:\IGOR\STUDY\stm32f407_mpt_lab\stm32f4xx_rcc.h

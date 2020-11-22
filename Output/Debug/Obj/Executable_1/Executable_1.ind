@@ -1,5 +1,6 @@
 "Output/Debug/Obj/Executable_1/system_stm32f4xx.o"
 "Output/Debug/Obj/Executable_1/main.o"
+"Output/Debug/Obj/Executable_1/stm32f4xx_adc.o"
 "Output/Debug/Obj/Executable_1/SEGGER_THUMB_Startup.o"
 "Output/Debug/Obj/Executable_1/STM32F4xx_Startup.o"
 "Output/Debug/Obj/Executable_1/STM32F40x_Vectors.o"

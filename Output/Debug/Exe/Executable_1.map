@@ -24,14 +24,15 @@ Memory use by input file:
   SEGGER_crtinit_v7em_little.o                           52                                    
   STM32F40x_Vectors.o                                   564                                    
   STM32F4xx_Startup.o                                    64                                    
-  main.o                                              1 386                                    
+  main.o                                              1 168                                    
+  stm32f4xx_adc.o                                       714                                    
   system_stm32f4xx.o                                    408          16           4            
   ---------------------------------------------  ----------  ----------  ----------  ----------
-  Subtotal (objects):                                 2 494          16           4            
+  Subtotal (objects):                                 2 990          16           4            
   ---------------------------------------------  ----------  ----------  ----------  ----------
   Linker created (init + veneers + exceptions):                      28                   2 048
   =============================================  ==========  ==========  ==========  ==========
-  Grand total:                                        2 494          44           4       2 048
+  Grand total:                                        2 990          44           4       2 048
   =============================================  ==========  ==========  ==========  ==========
 
 Detailed memory use by individual object file:
@@ -39,14 +40,15 @@ Detailed memory use by individual object file:
   Object File                                       RX Code     RO Data     RW Data     ZI Data
   ---------------------------------------------  ----------  ----------  ----------  ----------
   system_stm32f4xx.o                                    408          16           4            
-  main.o                                              1 386                                    
+  main.o                                              1 168                                    
+  stm32f4xx_adc.o                                       714                                    
   SEGGER_THUMB_Startup.o                                 20                                    
   STM32F4xx_Startup.o                                    64                                    
   STM32F40x_Vectors.o                                   564                                    
   SEGGER_crtinit_v7em_little.o                           52                                    
   [ Linker created ]                                                 28                   2 048
   =============================================  ==========  ==========  ==========  ==========
-  Total:                                              2 494          44           4       2 048
+  Total:                                              2 990          44           4       2 048
   =============================================  ==========  ==========  ==========  ==========
 
 
@@ -155,21 +157,26 @@ Sections by address:
   08000404-08000405  FPU_IRQHandler                      2   2  Code  RX  STM32F40x_Vectors.o
   08000406-08000407  Dummy_Handler                       2   2  Code  RX  STM32F40x_Vectors.o
   08000408-08000505  GPIO_GetPortClockState            254   2  Code  RX  main.o
-  08000506-0800057f  GPIO_PinAfConfig                  122   2  Code  RX  main.o
-  08000580-080005b9  timer_init                         58   2  Code  RX  main.o
-  080005ba-080005d1  Reset_Handler                      24   2  Code  RX  STM32F4xx_Startup.o
-  080005d2-080007a1  GPIO_PortClock                    464   2  Code  RX  main.o
-  080007a2-08000895  GPIO_PinConfigure                 244   2  Code  RX  main.o
-  08000896-080008a9  timer_enable                       20   2  Code  RX  main.o
-  080008aa-08000989  main                              224   2  Code  RX  main.o
-  0800098a-0800098b  ( UNUSED .=.+2 )                    2   -  ----  -   -
-  0800098c-0800098f  [.init_array]                       4   4  ----  --  STM32F4xx_Startup.o
-  08000990-0800099f  AHBPrescTable                      16   1  Cnst  RO  system_stm32f4xx.o
-  080009a0-080009bf  __SEGGER_init_ctors                32   4  Code  RX  SEGGER_crtinit_v7em_little.o
-  080009c0-080009d7  __SEGGER_init_table__              24   4  Cnst  RO  [ Linker created ]
-  080009d8-080009db  __SEGGER_init_data__                4   4  Cnst  RO  [ Linker created ]
-  080009dc-080009ef  __SEGGER_init_copy                 20   2  Code  RX  SEGGER_crtinit_v7em_little.o
-  080009f0-0fffffff  ( UNUSED .=.+134215184 )   134 215 184
+  08000506-0800058f  init                              138   2  Code  RX  main.o
+  08000590-0800062d  ADC_Init                          158   2  Code  RX  stm32f4xx_adc.o
+  0800062e-080007b3  ADC_RegularChannelConfig          390   2  Code  RX  stm32f4xx_adc.o
+  080007b4-080007c5  ADC_SoftwareStartConv              18   2  Code  RX  stm32f4xx_adc.o
+  080007c6-080007d3  ADC_GetConversionValue             14   2  Code  RX  stm32f4xx_adc.o
+  080007d4-08000805  ADC_GetFlagStatus                  50   2  Code  RX  stm32f4xx_adc.o
+  08000806-0800081d  Reset_Handler                      24   2  Code  RX  STM32F4xx_Startup.o
+  0800081e-080009ed  GPIO_PortClock                    464   2  Code  RX  main.o
+  080009ee-08000ae1  GPIO_PinConfigure                 244   2  Code  RX  main.o
+  08000ae2-08000b25  main                               68   2  Code  RX  main.o
+  08000b26-08000b4d  ADC_StructInit                     40   2  Code  RX  stm32f4xx_adc.o
+  08000b4e-08000b79  ADC_Cmd                            44   2  Code  RX  stm32f4xx_adc.o
+  08000b7a-08000b7b  ( UNUSED .=.+2 )                    2   -  ----  -   -
+  08000b7c-08000b7f  [.init_array]                       4   4  ----  --  STM32F4xx_Startup.o
+  08000b80-08000b8f  AHBPrescTable                      16   1  Cnst  RO  system_stm32f4xx.o
+  08000b90-08000baf  __SEGGER_init_ctors                32   4  Code  RX  SEGGER_crtinit_v7em_little.o
+  08000bb0-08000bc7  __SEGGER_init_table__              24   4  Cnst  RO  [ Linker created ]
+  08000bc8-08000bcb  __SEGGER_init_data__                4   4  Cnst  RO  [ Linker created ]
+  08000bcc-08000bdf  __SEGGER_init_copy                 20   2  Code  RX  SEGGER_crtinit_v7em_little.o
+  08000be0-0fffffff  ( UNUSED .=.+134214688 )   134 214 688
                                                              -  ----  -   -
   10000000-10000003  SystemCoreClock                     4   4  Init  RW  system_stm32f4xx.o
   10000004-2001f7ff  ( UNUSED .=.+268564476 )   268 564 476
@@ -197,9 +204,9 @@ Symbols by value and then by name:
                                                             ----  Gb  [ Linker created ]
   0x00000800  __RAM_segment_used_size__                     ----  Gb  [ Linker created ]
   0x00000800  __STACKSIZE__                                 ----  Gb  [ Linker created ]
-  0x000009F0  __FLASH1_segment_used_size__
+  0x00000BE0  __FLASH1_segment_used_size__
                                                             ----  Gb  [ Linker created ]
-  0x000009F0  __FLASH_segment_used_size__
+  0x00000BE0  __FLASH_segment_used_size__
                                                             ----  Gb  [ Linker created ]
   0x00001000  __BACKUP_RAM1_segment_size__
                                                             ----  Gb  [ Linker created ]
@@ -313,24 +320,29 @@ Symbols by value and then by name:
   0x08000405  FPU_IRQHandler                             2  Code  Wk  STM32F40x_Vectors.o
   0x08000407  Dummy_Handler                              2  Code  Wk  STM32F40x_Vectors.o
   0x08000409  GPIO_GetPortClockState            254      2  Code  Gb  main.o
-  0x08000507  GPIO_PinAfConfig                  122      2  Code  Gb  main.o
-  0x08000581  timer_init                         58      2  Code  Gb  main.o
-  0x080005BB  Reset_Handler                              2  Code  Gb  STM32F4xx_Startup.o
-  0x080005BB  reset_handler                              2  Code  Gb  STM32F4xx_Startup.o
-  0x080005D3  GPIO_PortClock                    464      2  Code  Gb  main.o
-  0x080007A3  GPIO_PinConfigure                 244      2  Code  Gb  main.o
-  0x08000897  timer_enable                       20      2  Code  Gb  main.o
-  0x080008AB  main                              224      2  Code  Gb  main.o
-  0x0800098C  __ctors_start__                               ----  Gb  [ Linker created ]
-  0x08000990  AHBPrescTable                      16         Cnst  Gb  system_stm32f4xx.o
-  0x08000990  __ctors_end__                                 ----  Gb  [ Linker created ]
-  0x080009A1  __SEGGER_init_ctors                24      4  Code  Wk  SEGGER_crtinit_v7em_little.o
-  0x080009C0  __SEGGER_init_table__            [24]      4  Cnst  Lc  [ Linker created ]
-  0x080009D8  __SEGGER_init_data__              [4]      4  Cnst  Lc  [ Linker created ]
-  0x080009DD  __SEGGER_init_copy                 20      2  Code  Wk  SEGGER_crtinit_v7em_little.o
-  0x080009F0  __FLASH1_segment_used_end__
+  0x08000507  init                              138      2  Code  Gb  main.o
+  0x08000591  ADC_Init                          158      2  Code  Gb  stm32f4xx_adc.o
+  0x0800062F  ADC_RegularChannelConfig          390      2  Code  Gb  stm32f4xx_adc.o
+  0x080007B5  ADC_SoftwareStartConv              18      2  Code  Gb  stm32f4xx_adc.o
+  0x080007C7  ADC_GetConversionValue             14      2  Code  Gb  stm32f4xx_adc.o
+  0x080007D5  ADC_GetFlagStatus                  50      2  Code  Gb  stm32f4xx_adc.o
+  0x08000807  Reset_Handler                              2  Code  Gb  STM32F4xx_Startup.o
+  0x08000807  reset_handler                              2  Code  Gb  STM32F4xx_Startup.o
+  0x0800081F  GPIO_PortClock                    464      2  Code  Gb  main.o
+  0x080009EF  GPIO_PinConfigure                 244      2  Code  Gb  main.o
+  0x08000AE3  main                               68      2  Code  Gb  main.o
+  0x08000B27  ADC_StructInit                     40      2  Code  Gb  stm32f4xx_adc.o
+  0x08000B4F  ADC_Cmd                            44      2  Code  Gb  stm32f4xx_adc.o
+  0x08000B7C  __ctors_start__                               ----  Gb  [ Linker created ]
+  0x08000B80  AHBPrescTable                      16         Cnst  Gb  system_stm32f4xx.o
+  0x08000B80  __ctors_end__                                 ----  Gb  [ Linker created ]
+  0x08000B91  __SEGGER_init_ctors                24      4  Code  Wk  SEGGER_crtinit_v7em_little.o
+  0x08000BB0  __SEGGER_init_table__            [24]      4  Cnst  Lc  [ Linker created ]
+  0x08000BC8  __SEGGER_init_data__              [4]      4  Cnst  Lc  [ Linker created ]
+  0x08000BCD  __SEGGER_init_copy                 20      2  Code  Wk  SEGGER_crtinit_v7em_little.o
+  0x08000BE0  __FLASH1_segment_used_end__
                                                             ----  Gb  [ Linker created ]
-  0x080009F0  __FLASH_segment_used_end__
+  0x08000BE0  __FLASH_segment_used_end__
                                                             ----  Gb  [ Linker created ]
   0x08080000  __FLASH1_segment_end__                        ----  Gb  [ Linker created ]
   0x08080000  __FLASH_segment_end__                         ----  Gb  [ Linker created ]
@@ -366,8 +378,15 @@ Symbols by name and then by address:
 
   Symbol                          Value        Size  Align  Type      Object File
   -------------------------  ----------  ----------  -----  --------  -----------
+  ADC_Cmd                    0x08000B4F          44      2  Code  Gb  stm32f4xx_adc.o
+  ADC_GetConversionValue     0x080007C7          14      2  Code  Gb  stm32f4xx_adc.o
+  ADC_GetFlagStatus          0x080007D5          50      2  Code  Gb  stm32f4xx_adc.o
   ADC_IRQHandler             0x08000389                  2  Code  Wk  STM32F40x_Vectors.o
-  AHBPrescTable              0x08000990          16         Cnst  Gb  system_stm32f4xx.o
+  ADC_Init                   0x08000591         158      2  Code  Gb  stm32f4xx_adc.o
+  ADC_RegularChannelConfig   0x0800062F         390      2  Code  Gb  stm32f4xx_adc.o
+  ADC_SoftwareStartConv      0x080007B5          18      2  Code  Gb  stm32f4xx_adc.o
+  ADC_StructInit             0x08000B27          40      2  Code  Gb  stm32f4xx_adc.o
+  AHBPrescTable              0x08000B80          16         Cnst  Gb  system_stm32f4xx.o
   CAN1_RX0_IRQHandler        0x0800038D                  2  Code  Wk  STM32F40x_Vectors.o
   CAN1_RX1_IRQHandler        0x0800038F                  2  Code  Wk  STM32F40x_Vectors.o
   CAN1_SCE_IRQHandler        0x08000391                  2  Code  Wk  STM32F40x_Vectors.o
@@ -407,9 +426,8 @@ Symbols by name and then by address:
   FPU_IRQHandler             0x08000405                  2  Code  Wk  STM32F40x_Vectors.o
   FSMC_IRQHandler            0x080003C5                  2  Code  Wk  STM32F40x_Vectors.o
   GPIO_GetPortClockState     0x08000409         254      2  Code  Gb  main.o
-  GPIO_PinAfConfig           0x08000507         122      2  Code  Gb  main.o
-  GPIO_PinConfigure          0x080007A3         244      2  Code  Gb  main.o
-  GPIO_PortClock             0x080005D3         464      2  Code  Gb  main.o
+  GPIO_PinConfigure          0x080009EF         244      2  Code  Gb  main.o
+  GPIO_PortClock             0x0800081F         464      2  Code  Gb  main.o
   HASH_RNG_IRQHandler        0x08000403                  2  Code  Wk  STM32F40x_Vectors.o
   HardFault_Handler          0x08000189                  4  Code  Wk  STM32F4xx_Startup.o
   I2C1_ER_IRQHandler         0x080003A5                  2  Code  Wk  STM32F40x_Vectors.o
@@ -430,7 +448,7 @@ Symbols by name and then by address:
   RCC_IRQHandler             0x0800036F                  2  Code  Wk  STM32F40x_Vectors.o
   RTC_Alarm_IRQHandler       0x080003B7                  2  Code  Wk  STM32F40x_Vectors.o
   RTC_WKUP_IRQHandler        0x0800036B                  2  Code  Wk  STM32F40x_Vectors.o
-  Reset_Handler              0x080005BB                  2  Code  Gb  STM32F4xx_Startup.o
+  Reset_Handler              0x08000807                  2  Code  Gb  STM32F4xx_Startup.o
   SDIO_IRQHandler            0x080003C7                  2  Code  Wk  STM32F40x_Vectors.o
   SPI1_IRQHandler            0x080003AB                  2  Code  Wk  STM32F40x_Vectors.o
   SPI2_IRQHandler            0x080003AD                  2  Code  Wk  STM32F40x_Vectors.o
@@ -490,18 +508,18 @@ Symbols by name and then by address:
   __FLASH1_segment_size__    0x00080000                     ----  Gb  [ Linker created ]
   __FLASH1_segment_start__   0x08000000                     ----  Gb  [ Linker created ]
   __FLASH1_segment_used_end__
-                             0x080009F0                     ----  Gb  [ Linker created ]
+                             0x08000BE0                     ----  Gb  [ Linker created ]
   __FLASH1_segment_used_size__
-                             0x000009F0                     ----  Gb  [ Linker created ]
+                             0x00000BE0                     ----  Gb  [ Linker created ]
   __FLASH1_segment_used_start__
                              0x08000000                     ----  Gb  [ Linker created ]
   __FLASH_segment_end__      0x08080000                     ----  Gb  [ Linker created ]
   __FLASH_segment_size__     0x00080000                     ----  Gb  [ Linker created ]
   __FLASH_segment_start__    0x08000000                     ----  Gb  [ Linker created ]
   __FLASH_segment_used_end__
-                             0x080009F0                     ----  Gb  [ Linker created ]
+                             0x08000BE0                     ----  Gb  [ Linker created ]
   __FLASH_segment_used_size__
-                             0x000009F0                     ----  Gb  [ Linker created ]
+                             0x00000BE0                     ----  Gb  [ Linker created ]
   __FLASH_segment_used_start__
                              0x08000000                     ----  Gb  [ Linker created ]
   __HEAPSIZE__               0x00000000                     ----  Gb  [ Linker created ]
@@ -520,26 +538,25 @@ Symbols by name and then by address:
   __RAM_segment_used_size__  0x00000800                     ----  Gb  [ Linker created ]
   __RAM_segment_used_start__
                              0x2001F800                     ----  Gb  [ Linker created ]
-  __SEGGER_init_copy         0x080009DD          20      2  Code  Wk  SEGGER_crtinit_v7em_little.o
-  __SEGGER_init_ctors        0x080009A1          24      4  Code  Wk  SEGGER_crtinit_v7em_little.o
-  __SEGGER_init_data__       0x080009D8         [4]      4  Cnst  Lc  [ Linker created ]
+  __SEGGER_init_copy         0x08000BCD          20      2  Code  Wk  SEGGER_crtinit_v7em_little.o
+  __SEGGER_init_ctors        0x08000B91          24      4  Code  Wk  SEGGER_crtinit_v7em_little.o
+  __SEGGER_init_data__       0x08000BC8         [4]      4  Cnst  Lc  [ Linker created ]
   __SEGGER_init_done         0x080001BB                  4  Code  Gb  SEGGER_THUMB_Startup.o
   __SEGGER_init_run_loop     0x080001B2                  4  Code  Lc  SEGGER_THUMB_Startup.o
-  __SEGGER_init_table__      0x080009C0        [24]      4  Cnst  Lc  [ Linker created ]
+  __SEGGER_init_table__      0x08000BB0        [24]      4  Cnst  Lc  [ Linker created ]
   __STACKSIZE_PROCESS__      0x00000000                     ----  Gb  [ Linker created ]
   __STACKSIZE__              0x00000800                     ----  Gb  [ Linker created ]
-  __ctors_end__              0x08000990                     ----  Gb  [ Linker created ]
-  __ctors_start__            0x0800098C                     ----  Gb  [ Linker created ]
+  __ctors_end__              0x08000B80                     ----  Gb  [ Linker created ]
+  __ctors_start__            0x08000B7C                     ----  Gb  [ Linker created ]
   __stack_end__              0x20020000                     ----  Gb  [ Linker created ]
   _start                     0x080001B1                  4  Code  Gb  SEGGER_THUMB_Startup.o
   _vectors                   0x08000000       [392]    512  Code  Gb  STM32F40x_Vectors.o
   _vectors_end               0x08000188                512  Code  Lc  STM32F40x_Vectors.o
   exit                       0x080001BF                  4  Code  Gb  SEGGER_THUMB_Startup.o
   hfLoop                     0x0800018E                  4  Code  Lc  STM32F4xx_Startup.o
-  main                       0x080008AB         224      2  Code  Gb  main.o
-  reset_handler              0x080005BB                  2  Code  Gb  STM32F4xx_Startup.o
-  timer_enable               0x08000897          20      2  Code  Gb  main.o
-  timer_init                 0x08000581          58      2  Code  Gb  main.o
+  init                       0x08000507         138      2  Code  Gb  main.o
+  main                       0x08000AE3          68      2  Code  Gb  main.o
+  reset_handler              0x08000807                  2  Code  Gb  STM32F4xx_Startup.o
 
 
 ***********************************************************************************************
@@ -552,7 +569,7 @@ Region summary:
 
   Name        Range                    Size                Used              Unused      Alignment Loss
   ----------  -----------------  ----------  ------------------  ------------------  ------------------
-  FLASH       08000000-0807ffff     524 288       2 542   0.48%     521 746  99.52%           0   0.00%
+  FLASH       08000000-0807ffff     524 288       3 038   0.58%     521 250  99.42%           0   0.00%
   CCM_RAM1    10000000-1000ffff      65 536           4   0.01%      65 532  99.99%           0   0.00%
   RAM         20000000-2001ffff     131 072       2 048   1.56%     129 024  98.44%           0   0.00%
 
