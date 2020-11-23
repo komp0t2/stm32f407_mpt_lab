@@ -200,7 +200,7 @@ void delay(void)
 
 {
     uint16_t i;
-    for (i = 0; i < 1000; i++)
+    for (i = 0; i < 100; i++)
         ;
 }
 
@@ -451,7 +451,7 @@ void DISPLAY_ON()  //Инициализация дисплея
     delay();
     LCD_COMMAND(0x02);
     delay();
-    LCD_COMMAND(0x0F);
+    LCD_COMMAND(0x0C);
     delay();
 }
 void init_keyboard()
