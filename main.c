@@ -28,8 +28,6 @@ void              init()
 }
 int main()
 {
-    while(1)
-    {
         init();
         while(1)
         {
@@ -40,7 +38,6 @@ int main()
 	    NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
 	    
         }
-    }
 }
 void TIM1_UP_TIM10_IRQHandler(void)
 {
