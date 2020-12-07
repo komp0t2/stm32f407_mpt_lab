@@ -202,7 +202,7 @@ HardFault_Handler:
         //
         // Check if HardFault is caused by BKPT instruction
         //
-        ldr     R1, =0xE000ED2C        // Load NVIC_HFSR
+        ldr     R1, =0xE000ED2C        // Load 000000000000000
         ldr     R2, [R1]
         cmp     R2, #0                  // Check NVIC_HFSR[31]
 

@@ -1,36 +1,43 @@
 #include "GPIO_Library.h"
+#include "LCD_Library.h"
 #include "stm32f407xx.h"
-void init_pin();
-int LCD_bufferline[10][16];
-int LCD_line	   = 0;
-int LCD_lenghtline = 0;
-void LCD_nextline()
+void transformation(LCD_InitTypeDef *LCD, int* buffer,int* sign)
 {
-	if (LCD_line < 1)
-	{
-		for (int i = 0; i < 24; i++) LCD_COMMAND(0x14);
-		LCD_line++;
-	}
-}
-void LCD_prevline()
-{
-	if (LCD_line >= 1)
-	{
-		for (int i = 0; i < 24; i++) LCD_COMMAND(0x10);
-		LCD_line--;
-	}
-}
-void transformation(uint16_t *buffer)
-{
-	LCD_COMMAND(0x1);
+	LCD_Clear(LCD);
 	for (int i = 0; i < 8; i++)
 	{
-		LCD_WRITE(buffer[i] * 2 + 128);
+		int size_numb = 0;
+		int tmp= 0;
+		buffer[i] = buffer[i]*sign[i]*2+128;
+		if ((buffer[i] >= 0)&&(sign[i] == - 1))
+		{
+			sign[i] = 1;
+		}
+		else if (buffer[i] < 0)
+		{
+			buffer[i]*=-1;
+		}
+		for (int tmp_numb = buffer[i]; tmp_numb > 0; size_numb++)
+		{
+			tmp_numb /= 10;
+		}
+		for (int j = 0; j < size_numb; j++)
+		{
+			tmp = tmp * (j > 0 ? 10 : 1) + buffer[i]%10;
+			buffer[i]/=10;
+		}
+		if(sign[i] == -1)LCD_WRITE(LCD, 0x2D, true);
+		for (int k = 0; k < size_numb; k++)
+		{
+			LCD_WRITE(LCD, tmp % 10 + 0x30, true);
+			tmp/=10;
+		}
+		if(i!=7)LCD_WRITE(LCD, 0x20, true);
 	}
 }
 int main()
 {
-	uint8_t keys_symb[16] = {
+	static uint8_t keys_symb[16] = {
 		KEY_ZERO,
 		KEY_ONE,
 		KEY_TWO,
@@ -48,7 +55,7 @@ int main()
 		KEY_NUMBER,
 		KEY_ASTERISK,
 	};
-	uint8_t LCD_symb[16] = {
+	static uint8_t LCD_symb[16] = {
 		LCD_ZERO,
 		LCD_ONE,
 		LCD_TWO,
@@ -66,13 +73,14 @@ int main()
 		LCD_NUMBER,
 		LCD_ASTERISK,
 	};
-	uint16_t numbs_buffer[8] = {0};
+	int numbs_buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	//
-
-	int numbs_size	= 0;
-	int size_buffer = 0;
-
-	DISPLAY_ON();
+	LCD_InitTypeDef LCD1;
+	int sign_buffer[8]	  = {1, 1, 1, 1, 1, 1, 1, 1};
+	int size_buffer		  = 0;
+	bool space_allow_flag = false;
+	int size_numb		  = 0;
+	DISPLAY_ON(&LCD1);
 	init_keyboard();
 	GPIO_PinConfigure(GPIOB, 7, GPIO_MODE_OUTPUT, GPIO_SPEED_LOW, GPIO_PULL_NOT, GPIO_OUTCONF_PUSHPULL);
 	GPIO_PinConfigure(GPIOE, 0, GPIO_MODE_OUTPUT, GPIO_SPEED_LOW, GPIO_PULL_NOT, GPIO_OUTCONF_PUSHPULL);
@@ -95,117 +103,111 @@ int main()
 					//GPIO_PIN_OUT(GPIOB, 8, true);
 					if (key_code == KEY_C)
 					{
-						LCD_COMMAND(0x1);
-						numbs_size	   = 0;
-						size_buffer	   = 0;
-						LCD_lenghtline = 0;
-						LCD_line	   = 0;
+						LCD_Clear(&LCD1);
+						for (int i = 0; i < 8; i++)
+						{
+							sign_buffer[i] = 1;
+							numbs_buffer[i] = 0;
+						}
+						size_numb		 = 0;
+						size_buffer		 = 0;
+						space_allow_flag = false;
+						
 					}
-					else if (key_code == KEY_A) //FUNC
+					else if (key_code == KEY_A) //Up line
 					{
-						LCD_WRITE(LCD_symb[i]);
-						//if (size_buffer == 8)
-						//	transformation(numbs_buffer);
+						LCD_lineup(&LCD1);
+					}
+					else if (key_code == KEY_B) //down line
+					{
+						LCD_linedown(&LCD1);
+					}
+					else if (key_code == KEY_D) //down line
+					{
+						transformation(&LCD1, numbs_buffer, sign_buffer);
+						size_buffer = 7;
+						size_numb = 3;
 					}
 					else if (key_code == KEY_NUMBER) //BackspaceLCD
 					{
-						if (size_buffer > 0)
+						LCD_backspace(&LCD1);
+						if ((size_numb == 0) && (size_buffer > 0) && (sign_buffer[size_buffer] == 1))
 						{
-							if (LCD_lenghtline <= 0)
-							{
-								LCD_prevline();
-								LCD_lenghtline = 16;
-							}
-							else
-								LCD_lenghtline--;
-							LCD_backspace();
-							size_buffer--;
-							numbs_buffer[numbs_size] /= 10;
+							size_numb = 0;
+							for (int tmp_numb = numbs_buffer[--size_buffer]; tmp_numb > 0; size_numb++) tmp_numb /= 10;
+							space_allow_flag = true;
 						}
-						else if (numbs_size > 0)
+						else if ((size_numb == 0) && (sign_buffer[size_buffer] == -1))
 						{
-							if (LCD_lenghtline <= 0)
+							sign_buffer[size_buffer] = 1;
+						}
+						else if (size_numb != 0)
+						{
+							size_numb--;
+							numbs_buffer[size_buffer]/=10;
+							if ((size_buffer == 0) && (size_numb == 0)) space_allow_flag = false;
+						}
+					}
+					else if (key_code == KEY_ASTERISK) //Space
+					{
+						if ((size_buffer < 7))
+						{
+							if (space_allow_flag == true)
 							{
-								LCD_prevline();
-								LCD_lenghtline = 16;
-							}
-							else
-								LCD_lenghtline--;
-							LCD_backspace();
-							numbs_size--;
-							int bkspbuffer = numbs_buffer[numbs_size];
-							while (bkspbuffer > 0)
-							{
-								bkspbuffer /= 10;
+								LCD_WRITE(&LCD1, 0x20, true);
+								space_allow_flag = false;
 								size_buffer++;
+								size_numb = 0;
+							}
+							else if (sign_buffer[size_buffer] != -1)
+							{
+								LCD_WRITE(&LCD1, 0x2D, true);
+								sign_buffer[size_buffer] = -1;
 							}
 						}
 					}
-					else if (numbs_size < 8)
+					else if (size_numb < 3)
 					{
-						if (key_code == KEY_ASTERISK) //Space
+						numbs_buffer[size_buffer] = numbs_buffer[size_buffer] * (size_numb++ > 0 ? 10 : 1) + i;
+						if ((sign_buffer[size_buffer] == 1) && (numbs_buffer[size_buffer] > 127))
 						{
-							LCD_WRITE(0x20);
-							numbs_size++;
-							size_buffer = 0;
-							LCD_lenghtline++;
-						}
-						else
-						{
-
-							if (size_buffer < 3) //Input numbs
+							if (numbs_buffer[size_buffer] / 100 != 1)
 							{
-								numbs_buffer[numbs_size] = i + numbs_buffer[numbs_size] * (size_buffer <= 0 ? 0 : 10);
-								size_buffer++;
-								LCD_lenghtline++;
-								if (numbs_buffer[numbs_size] > 127) //max numb 128
-								{
-									numbs_buffer[numbs_size] = 127;
-									if (LCD_lenghtline < 1)
-									{
-										LCD_backspace();
-										LCD_lenghtline--;
-										LCD_prevline();
-										LCD_lenghtline=15;
-										LCD_backspace();
-										LCD_lenghtline--;
-										if (LCD_lenghtline < 14)
-											{
-												LCD_WRITE(LCD_symb[1]);
-												LCD_WRITE(LCD_symb[2]);
-												LCD_nextline();
-												LCD_WRITE(LCD_symb[7]);
-											}
-										else if (LCD_lenghtline < 15)
-										{
-											LCD_WRITE(LCD_symb[1]);
-											LCD_nextline();
-											LCD_WRITE(LCD_symb[2]);
-											LCD_WRITE(LCD_symb[7]);
-										}
-									}
-									else
-									{
-										LCD_backspace();
-										LCD_backspace();
-										LCD_WRITE(LCD_symb[1]);
-										LCD_WRITE(LCD_symb[2]);
-										LCD_WRITE(LCD_symb[7]);
-									}
-								}
-								else
-								{
-									LCD_WRITE(LCD_symb[i]);
-									LCD_bufferline[LCD_line][LCD_lenghtline] = LCD_symb[i];
-								}
-
-								if (LCD_lenghtline >= 16)
-								{
-									LCD_nextline();
-									LCD_lenghtline = 0;
-								}
+								LCD_backspace(&LCD1);
+								LCD_backspace(&LCD1);
+								numbs_buffer[size_buffer] = 127;
+								LCD_WRITE(&LCD1, numbs_buffer[size_buffer] / 100 + 0x30, true);
 							}
+							else if (numbs_buffer[size_buffer] / 10 % 10 != 2)
+							{
+								LCD_backspace(&LCD1);
+								numbs_buffer[size_buffer] = 127;
+							}
+							LCD_WRITE(&LCD1, numbs_buffer[size_buffer] / 10 % 10 + 0x30, true);
 						}
+						else if ((sign_buffer[size_buffer] == -1) && (numbs_buffer[size_buffer] > 128))
+						{
+							if (numbs_buffer[size_buffer] / 100 != 1)
+							{
+								LCD_backspace(&LCD1);
+								LCD_backspace(&LCD1);
+								numbs_buffer[size_buffer] = 128;
+								LCD_WRITE(&LCD1, numbs_buffer[size_buffer] / 100 + 0x30, true);
+							}
+							else if (numbs_buffer[size_buffer] / 10 % 10 != 2)
+							{
+								LCD_backspace(&LCD1);
+								numbs_buffer[size_buffer] = 128;
+							}
+							LCD_WRITE(&LCD1, numbs_buffer[size_buffer] / 10 % 10 + 0x30, true);
+						}
+						if (LCD1.current_line_buffer != LCD1.current_select_line)
+						{
+							LCD1.current_select_line = LCD1.current_line_buffer;
+							LCD_rewritingline(&LCD1);
+						}
+						LCD_WRITE(&LCD1, numbs_buffer[size_buffer] % 10 + 0x30, true);
+						space_allow_flag = true;
 					}
 					DELAY(250000);
 					break;
